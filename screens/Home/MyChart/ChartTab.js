@@ -73,7 +73,7 @@ const ChartTab = () => {
                         color: COLORS.primary
                     }}
                 >
-                    {`${totalSpending.toLocaleString('en', { minimumFractionDigits: 2 })}`}
+                    {`${totalSpending.toLocaleString('en', { })}`}
                 </Text>
 
                 <VictoryChart

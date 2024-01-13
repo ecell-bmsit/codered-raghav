@@ -328,7 +328,7 @@ const ProductTab = () => {
           marginTop: SIZES.padding,
         }}
         seeMoreOnPress={() => {
-          navigation.navigate("FlashDeal");
+          // navigation.navigate("FlashDeal");
         }}
       >
         <FlatList

@@ -250,7 +250,7 @@ const Otp = ({ navigation }) => {
                                         ...FONTS.body3
                                     }}
                                 >
-                                    Leading e-commerce market
+                                    
                                 </Text>
 
                                 <TextButton

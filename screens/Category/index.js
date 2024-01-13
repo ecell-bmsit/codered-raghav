@@ -1,49 +1,34 @@
-import React from "react";
+import React from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
-    Image,
-    Animated,
-    //FlatList,
-    ScrollView,
-} from "react-native"
-import { useNavigation } from '@react-navigation/native';
-import { connect } from "react-redux";
-// import { Camera, CameraPermissionStatus, useCameraDevices } from 'react-native-vision-camera';
-
-import { toggleCameraModal } from "../../stores/modal/modalActions";
-
-import ProductTab from "./Product/ProductTab";
-import ChartTab from "./MyChart/ChartTab";
-import ServiceTab from "./Service/ServiceTab";
-
+    Animated
+} from 'react-native';
+import { connect } from 'react-redux';
 import {
     DashboardHeader,
-    FormInput,
     IconBadgeButton,
-    IconButton,
-    ScanProductMessageModal
-} from "../../components"
+    IconButton
+} from '../../components'
 import {
     COLORS,
-    SIZES,
-    icons,
     FONTS,
-    lightTheme,
-    darkTheme,
+    SIZES,
     constants,
-    dummyData
-} from "../../constants"
+    icons
+} from '../../constants';
+import GeneralTab from './General/GeneralTab';
+import CollectionTab from './Collection/CollectionTab';
 
-const home_tabs = constants.home_tabs.map((home_tab) => ({
-    ...home_tab,
+const category_tabs = constants.category_tabs.map((category_tab) => ({
+    ...category_tab,
     ref: React.createRef()
 }))
 
 const TabIndicator = ({ measureLayout, scrollX }) => {
 
-    const inputRange = home_tabs.map((_, i) => i * SIZES.width)
+    const inputRange = category_tabs.map((_, i) => i * SIZES.width)
 
     const translateX = scrollX.interpolate({
         inputRange,
@@ -78,15 +63,15 @@ const Tabs = ({ scrollX, onTabPress }) => {
     React.useEffect(() => {
         let ml = []
 
-        home_tabs.forEach(home_tab => {
-            home_tab?.ref?.current?.measureLayout(
+        category_tabs.forEach(category_tab => {
+            category_tab?.ref?.current?.measureLayout(
                 containerRef.current,
                 (x, y, width, height) => {
                     ml.push({
                         x, y, width, height
                     })
 
-                    if (ml.length === home_tabs.length) {
+                    if (ml.length === category_tabs.length) {
                         setMeasureLayout(ml)
                     }
                 }
@@ -106,16 +91,16 @@ const Tabs = ({ scrollX, onTabPress }) => {
             {measureLayout.length > 0 && <TabIndicator measureLayout={measureLayout} scrollX={scrollX} />}
 
             {/* Tabs */}
-            {home_tabs.map((item, index) => {
+            {category_tabs.map((item, index) => {
                 const textColor = tabPosition.interpolate({
                     inputRange: [index - 1, index, index + 1],
-                    outputRange: [COLORS.light, COLORS.secondary, COLORS.light],
+                    outputRange: [COLORS.grey, COLORS.dark, COLORS.grey],
                     extrapolate: 'clamp'
                 })
 
                 return (
                     <TouchableOpacity
-                        key={`HomeTabs-${index}`}
+                        key={`CategoryTabs-${index}`}
                         ref={item.ref}
                         style={{
                             marginRight: SIZES.padding
@@ -137,31 +122,8 @@ const Tabs = ({ scrollX, onTabPress }) => {
     )
 }
 
-const Home = ({ navigation, showCameraModal, toggleCameraModal, cartQuantity }) => {
-
-    const bottomSheetModalRef = React.useRef(null);
-
-    // Bottom Sheet
-    //const snapPoints = React.useMemo(() => ['60%'], []);
-
-    // callbacks
-    const showModal = React.useCallback(() => {
-        bottomSheetModalRef.current?.present();
-    }, []);
-
-    const hideModal = React.useCallback(() => {
-        toggleCameraModal(false)
-        bottomSheetModalRef.current?.dismiss()
-    }, []);
-
-    const hideModalWithNavigation = React.useCallback(() => {
-
-        console.log("hideModalWithNavigation")
-        toggleCameraModal(false)
-        bottomSheetModalRef.current?.dismiss()
-        navigation.navigate("ScanProduct")
-    }, []);
-
+const Category = ({ cartQuantity }) => {
+    
     const flatListRef = React.useRef()
     const scrollX = React.useRef(new Animated.Value(0)).current;
 
@@ -171,101 +133,37 @@ const Home = ({ navigation, showCameraModal, toggleCameraModal, cartQuantity }) 
         })
     })
 
-    const [banners, setBanners] = React.useState(dummyData.banners)
-
-    React.useEffect(() => {
-        console.log("showCameraModal")
-        console.log(showCameraModal)
-        if (showCameraModal) {
-            showModal()
-        }
-    }, [showCameraModal])
-
-    // Render
-
-    function renderHeaderBackground() {
-        return (
-            <View
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    width: "100%",
-                    height: 300,
-                    backgroundColor: COLORS.primary,
-
-                }}
-            />
-        )
-    }
-
     function renderHeader() {
         return (
             <DashboardHeader
-                title="Home"
+                title="Category"
+                titleStyle={{
+                    color: COLORS.dark
+                }}
                 rightComponent={
                     <View
                         style={{
                             flexDirection: "row"
                         }}
                     >
-
                         <IconButton
-                            icon={icons.bell}
+                            icon={icons.options}
                             iconStyle={{
                                 marginRight: SIZES.radius,
                                 width: 25,
                                 height: 25
                             }}
-                            onPress={() => navigation.navigate("Notification")}
+                            onPress={() => {
+                                console.log('options pressed')
+                            }}
                         />
 
                     </View>
                 }
-
             />
         )
     }
 
-    function renderSearchBar() {
-        return (
-            <FormInput
-                containerStyle={{
-                    marginTop: SIZES.radius,
-                    marginHorizontal: SIZES.padding,
-                    borderRadius: SIZES.radius,
-                }}
-                placeholder="Search Jobs"
-                inputStyle={{
-                    marginLeft: SIZES.radius
-                }}
-                prependComponent={
-                    <Image
-                        source={icons.search}
-                        style={{
-                            height: 25,
-                            width: 25,
-                        }}
-                    />
-                }
-                appendComponent={
-                    <IconButton
-                        icon={icons.camera}
-                        iconStyle={{
-                            width: 25,
-                            height: 25
-                        }}
-                        onPress={(e) => {
-                            e.preventDefault()
-                            console.log("Prevent")
-                            toggleCameraModal(!showCameraModal)
-                        }}
-                    />
-                }
-                // onPress={() => navigation.navigate("SearchProduct")}
-                editable={Platform.OS === 'ios' ? false : true}
-            />
-        )
-    }
 
     function renderTopTabBar() {
         return (
@@ -289,7 +187,7 @@ const Home = ({ navigation, showCameraModal, toggleCameraModal, cartQuantity }) 
             <View
                 style={{
                     flex: 1,
-                    flexDirection: 'row'
+                    flexDirection: 'row',
                 }}
             >
                 <Animated.FlatList
@@ -305,8 +203,8 @@ const Home = ({ navigation, showCameraModal, toggleCameraModal, cartQuantity }) 
                     decelerationRate="fast"
                     scrollEventThrottle={16}
                     showsHorizontalScrollIndicator={false}
-                    data={constants.home_tabs}
-                    keyExtractor={item => `HomeTabs-${item.id}`}
+                    data={constants.category_tabs}
+                    keyExtractor={item => `CategoryTabs-${item.id}`}
                     onScroll={
                         Animated.event([
                             { nativeEvent: { contentOffset: { x: scrollX } } }
@@ -321,9 +219,8 @@ const Home = ({ navigation, showCameraModal, toggleCameraModal, cartQuantity }) 
                                     width: SIZES.width,
                                 }}
                             >
-                                {item?.id == 0 && <ProductTab />}
-                                {item?.id == 1 && <ChartTab />}
-                                {item?.id == 2 && <ServiceTab />}
+                                {item?.id == 0 && <GeneralTab />}
+                                {item?.id == 1 }
                             </View>
                         )
                     }}
@@ -336,43 +233,25 @@ const Home = ({ navigation, showCameraModal, toggleCameraModal, cartQuantity }) 
         <View
             style={{
                 flex: 1,
-                //backgroundColor: "yellow"
+                backgroundColor: COLORS.lightGrey
             }}
         >
             {/* Header */}
-            {renderHeaderBackground()}
             {renderHeader()}
-
-            {/* Search Bar */}
-            {renderSearchBar()}
 
             {/* Tab Bar */}
             {renderTopTabBar()}
 
             {/* Content */}
             {renderTabContent()}
-
-            {/* Modal */}
-            <ScanProductMessageModal
-                bottomSheetModalRef={bottomSheetModalRef}
-                hideModal={hideModal}
-                hideModalWithNavigation={hideModalWithNavigation}
-            />
         </View>
     )
 }
 
 function mapStateToProps(state) {
     return {
-        showCameraModal: state.modalReducer.showCameraModal,
         cartQuantity: state.cartReducer.cartQuantity,
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        toggleCameraModal: (toggleValue) => { return dispatch(toggleCameraModal(toggleValue)) }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Category);
