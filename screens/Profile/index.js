@@ -3,12 +3,16 @@ import {
     View,
     Text,
     Image,
+    Alert,
     ScrollView,
     TouchableOpacity
 } from "react-native"
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { Shadow } from 'react-native-shadow-2';
+import { scale } from "react-native-size-matters";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CommonActions } from "@react-navigation/native";
 import Animated, {
     Extrapolate,
     interpolate,
@@ -312,7 +316,7 @@ const Profile = ({ cartQuantity }) => {
                     leftIcon={icons.clipboard}
                     label1="AI Resume Maker"
                     label2="Subscribe For plus"
-                    onPress={() => navigation.navigate("Resumemaker")}
+                    // onPress={() => navigation.navigate("Resumemaker")}
                 />
             </View>
         )
@@ -368,27 +372,63 @@ const Profile = ({ cartQuantity }) => {
             </View>
         )
     }
-
-    function renderLogoutButton() {
+ function renderLogoutButton() {
+        const confirmLogout = () => {
+          Alert.alert(
+            "Logout", //Title
+            "Are you sure you want to logout?", //Message
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Logout cancelled"),
+                style: "cancel",
+              },
+              {
+                text: "Yes",
+                onPress: () => logout(),
+              },
+            ],
+            { cancelable: false }
+          );
+        };
+        const logout = async () => {
+          try {
+            await AsyncStorage.removeItem("user");
+            await AsyncStorage.removeItem("elite");
+    
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0, // Start at the first route in the new stack
+                routes: [
+                  { name: "Welcome" }, // The new stack contains only the Welcome route
+                ],
+              })
+            );
+          } catch (error) {
+            Alert.alert("Something went Wrong:", error.message);
+          }
+        };
         return (
             <TextButton
-                label="Logout"
-                contentContainerStyle={{
-                    marginTop: SIZES.radius,
-                    height: 50,
-                    borderWidth: 2,
-                    borderRadius: SIZES.radius,
-                    borderColor: COLORS.primary,
-                    backgroundColor: COLORS.light
-                }}
-                labelStyle={{
-                    color: COLORS.primary,
-                    ...FONTS.h3
-                }}
+              label=" Sign Out"
+              contentContainerStyle={{
+                marginTop: SIZES.radius,
+                height: scale(50),
+               // borderWidth: 2,
+                borderRadius: SIZES.radius*4,
+                borderColor: COLORS.primary,
+              }}
+              labelStyle={{
+                color: COLORS.light,
+                ...FONTS.h3,
+              }}
+              onPress={confirmLogout}
             />
-        )
-    }
-
+          );
+        }
+        // if (loading) {
+        //   return <SplashScreen />;
+        // }
     return (
         <View
             style={{

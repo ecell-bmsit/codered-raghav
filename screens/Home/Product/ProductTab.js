@@ -344,7 +344,7 @@ const ProductTab = () => {
           keyExtractor={(_, index) => `FlashDeals_${index}`}
           renderItem={({ item, index }) => {
               return (
-                <View
+                <TouchableOpacity
                   style={{
                     ...styles.flashDealsContainer,
                     marginLeft: SIZES.radius,
@@ -392,7 +392,7 @@ const ProductTab = () => {
 
                   {/* Products Sold Bar */}
                   <ProductSoldBar percentage={item?.percentage} />
-                </View>
+                </TouchableOpacity>
               );
             }
           }
