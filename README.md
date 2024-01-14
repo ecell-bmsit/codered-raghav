@@ -40,11 +40,11 @@ Welcome to our Job Portal and Resume Management System! This platform is designe
 
 1. Clone this repository
    ```
-   $ https://github.com/raghav029/hackaphasia.git
+   $ https://github.com/raghav029/codered.git
    ```
 2. Install all depedencies on the package.json
    ```
-   $ cd hackaphasia
+   $ cd codered
    $ npm i
    ```
 3. Run Application
@@ -58,8 +58,8 @@ Welcome to our Job Portal and Resume Management System! This platform is designe
 
 1. Install all requirements.txt
    ```
-   $ cd hackaphasia
-   $ cd hackaphasia
+   $ cd Torrentjob
+   $ cd backend
    $ pip install -r requirements.txt
    ```
 3. Run Backend
@@ -68,7 +68,7 @@ Welcome to our Job Portal and Resume Management System! This platform is designe
    ```
 
 OR
-Deploy it to Heroku and <a href="https://github.com/Binbasri-in/try_hack_deploy">here is the guide</a>
+Deploy it to Heroku and <a href="https://github.com/raghav029/try_hack_deploy">here is the guide</a>
 
 
 ## Screenshoot
