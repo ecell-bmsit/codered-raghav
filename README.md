@@ -111,12 +111,7 @@ Deploy it to Heroku and <a href="https://github.com/Binbasri-in/try_hack_deploy"
           <sub><b>Krishna Gupta</b></sub>
         </a>
       </td>
-      <td align="center">
-        <a href="[https://github.com/Sammy-100](https://github.com/Binbasri-in)">
-          <img width="100" src="https://avatars.githubusercontent.com/u/87440507?u=3e8e326d18283e8f43a27a575153667094cd12ec&v=4" alt="Mohammed Ali"><br/>
-          <sub><b>Mohammed Ali </b></sub>
-        </a>
-      </td>
+      
     </tr>
   </table>
 </center>
